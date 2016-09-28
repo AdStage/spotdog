@@ -122,6 +122,7 @@ module Spotdog
           "spotinstance",
           c4xlarge_points,
           {
+            host: "aws",
             instance_type: "c4_xlarge",
             machine_type: "linux_vpc",
             availability_zone: "ap_northeast_1b"
@@ -131,6 +132,7 @@ module Spotdog
           "spotinstance",
           m4large_points,
           {
+            host: "aws",
             instance_type: "m4_large",
             machine_type: "windows_classic",
             availability_zone: "ap_northeast_1c"
@@ -140,6 +142,7 @@ module Spotdog
           "spotinstance",
           r3xlarge_points,
           {
+            host: "aws",
             instance_type: "r3_xlarge",
             machine_type: "suse_vpc",
             availability_zone: "ap_northeast_1c"

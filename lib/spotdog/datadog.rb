@@ -41,6 +41,7 @@ module Spotdog
 
     def price_metric_tags_of(spot_price)
       {
+        host: "aws",
         name: @prefix,
         instance_type: spot_price[:instance_type].sub(".", "_"),
         machine_type: os_type_of(spot_price),
