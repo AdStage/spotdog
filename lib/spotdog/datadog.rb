@@ -13,6 +13,7 @@ module Spotdog
 
     def initialize(api_key, prefix)
       @client = Dogapi::Client.new(api_key)
+      @client.add_tags("aws", ["instance_name", "machine_type", "availability_zone"])
       @prefix = prefix
     end
 
