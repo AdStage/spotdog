@@ -119,16 +119,31 @@ module Spotdog
 
       it "should call emit_point" do
         expect_any_instance_of(Dogapi::Client).to receive(:emit_points).with(
-          "spotinstance.c4_xlarge.linux_vpc.ap_northeast_1b",
-          c4xlarge_points
+          "spotinstance",
+          c4xlarge_points,
+          {
+            instance_type: "c4_xlarge",
+            machine_type: "linux_vpc",
+            availability_zone: "ap_northeast_1b"
+          }
         )
         expect_any_instance_of(Dogapi::Client).to receive(:emit_points).with(
-          "spotinstance.m4_large.windows_classic.ap_northeast_1c",
-          m4large_points
+          "spotinstance",
+          m4large_points,
+          {
+            instance_type: "m4_large",
+            machine_type: "windows_classic",
+            availability_zone: "ap_northeast_1c"
+          }
         )
         expect_any_instance_of(Dogapi::Client).to receive(:emit_points).with(
-          "spotinstance.r3_xlarge.suse_vpc.ap_northeast_1c",
-          r3xlarge_points
+          "spotinstance",
+          r3xlarge_points,
+          {
+            instance_type: "r3_xlarge",
+            machine_type: "suse_vpc",
+            availability_zone: "ap_northeast_1c"
+          }
         )
         datadog.send_price_history(spot_price_history)
       end

@@ -17,7 +17,7 @@ module Spotdog
     end
 
     def send_price_history(spot_price_history)
-      price_groups_from(spot_price_history).each { |metric_name, price_history| @client.emit_points(metric_name, price_points_of(price_history)) }
+      price_groups_from(spot_price_history).each { |metric_tags, price_history| @client.emit_points(metric_tags[:name], price_points_of(price_history), metric_tags.reject { |k,v| k == :name }) }
     end
 
     def send_spot_instance_requests(spot_instance_requests)
@@ -28,9 +28,9 @@ module Spotdog
 
     def price_groups_from(spot_price_history)
       spot_price_history.inject({}) do |result, spot_price|
-        metric_name = price_metric_name_of(spot_price)
-        result[metric_name] ||= []
-        result[metric_name] << spot_price
+        metric_tags = price_metric_tags_of(spot_price)
+        result[metric_tags] ||= []
+        result[metric_tags] << spot_price
         result
       end
     end
@@ -39,14 +39,13 @@ module Spotdog
       spot_instance_requests.group_by { |request| request_metric_name_of(request) }
     end
 
-    def price_metric_name_of(spot_price)
-      # "spotinstance.c4_xlarge.linux_vpc.ap-northeast-1b"
-      [
-        @prefix,
-        spot_price[:instance_type].sub(".", "_"),
-        os_type_of(spot_price),
-        spot_price[:availability_zone].gsub("-", "_")
-      ].join(".")
+    def price_metric_tags_of(spot_price)
+      {
+        name: @prefix,
+        instance_type: spot_price[:instance_type].sub(".", "_"),
+        machine_type: os_type_of(spot_price),
+        availability_zone: spot_price[:availability_zone].gsub("-", "_")
+      }
     end
 
     def request_metric_name_of(spot_instance_request)
